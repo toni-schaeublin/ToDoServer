@@ -25,28 +25,53 @@ public class ServerModel extends Thread {
 						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 						OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());) {
 					String message = in.readLine();
-					//Message vom Client in Teile zerlegen:
-					
-					/*MessageType, Data, Data, Data, Data...
-					 CreateLogin, Username, Password
-					 Login, Username, Password
-					 ChangePasword, New password 
-					 Logout, -
-					 CreateToDo, Title, Priority, Description, DueDate
-					 GetToDo, ID
-					 DeleteToDo, ID
-					 ListToDos, List of IDs
-					 Ping, (Token)
-					 
-					
+					// Message vom Client in Teile zerlegen:
+
+					/*
+					 * MessageType, Data, Data, Data, Data... CreateLogin, Username, Password Login,
+					 * Username, Password ChangePasword, New password Logout, - CreateToDo, Title,
+					 * Priority, Description, DueDate GetToDo, ID DeleteToDo, ID ListToDos, List of
+					 * IDs Ping, (Token)
 					 */
+					
 					String[] messageParts = message.split(SEPARATOR);
 					int length = messageParts.length;
+					System.out.println(length);
 					// Testausgabe zum debuggen...
-					for (int i = 0; i < length; i++) {
-						System.out.println(messageParts[i]);
+					String messageType = messageParts[0];
+					switch (messageType) {
+					case "CreateLogin":
+						System.out.println("CreateLogin");
+						break;
+					case "Login":
+						System.out.println("Login");
+						break;
+					case "ChangePassword":
+						System.out.println("ChangePassword");
+						break;
+					case "Logout":
+						System.out.println("Logout");
+						break;
+					case "CreateToDo":
+						System.out.println("CreateToDo");
+						break;
+					case "DeleteToDo":
+						System.out.println("DeleteToDo");
+						break;
+					case "ListToDos":
+						System.out.println("ListToDos");
+						break;
+					case "Ping":
+						System.out.println("Ping");
+						break;
+					default:
+						out.write("false\n");
+						out.flush();
+						System.out.println("false\n");
 					}
-					// Der Rückgabe-String muss noch entsprechend generiert werden. Idee: Switchen auf
+
+					// Der Rückgabe-String muss noch entsprechend generiert werden. Idee: Switchen
+					// auf
 					// messageType
 					String reply = ("");
 					out.write(reply);
