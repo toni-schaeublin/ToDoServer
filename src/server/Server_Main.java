@@ -3,8 +3,10 @@ package server;
 public class Server_Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		int port = 8080;
 
+		ServerModel serverModel = new ServerModel(port);
+		serverModel.start();
 	}
 
 }
