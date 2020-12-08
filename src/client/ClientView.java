@@ -45,7 +45,7 @@ public class ClientView {
 		mainWindow.getChildren().add(tabPane);
 
 		Scene scene = new Scene(mainWindow);
-		// scene.getStylesheets().add(getClass().getResource("ClientMVC.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("ClientMVC.css").toExternalForm());
 		stage.setScene(scene);
 	}
 
@@ -59,21 +59,27 @@ public class ClientView {
 	}
 
 	private Pane createConnectPane() {
-		BorderPane connectPane = new BorderPane();
+		GridPane connectPane = new GridPane();
 
 		return connectPane;
 	}
 
 	private Pane createToDoPane() {
-		BorderPane toDoPane = new BorderPane();
+		GridPane toDoPane = new GridPane();
 
 		return toDoPane;
 	}
 
 	public Pane createAccountPane() {
-		BorderPane createAccountoPane = new BorderPane();
-
-		return createAccountoPane;
+		GridPane createAccountPane = new GridPane();
+		createAccountPane.add(createUserLbl, 0, 0);
+		createAccountPane.add(createPasswordLbl, 0, 1);
+		createAccountPane.add(createUserTxt, 1, 0);
+		createAccountPane.add(createPasswordTxt, 1, 1);
+		createAccountPane.add(createUserBtn, 0, 2);
+		createAccountPane.add(loginBtn, 0, 3);
+		createAccountPane.add(logoutBtn, 0, 4);
+		return createAccountPane;
 	}
 
 }
