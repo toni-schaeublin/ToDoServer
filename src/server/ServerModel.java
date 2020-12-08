@@ -25,13 +25,20 @@ public class ServerModel extends Thread {
 						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 						OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());) {
 					String message = in.readLine();
-					// Message vom Client in Teile zerlegen:
-
-					/*
-					 * MessageType, Data, Data, Data, Data... CreateLogin, Username, Password Login,
-					 * Username, Password ChangePasword, New password Logout, - CreateToDo, Title,
-					 * Priority, Description, DueDate GetToDo, ID DeleteToDo, ID ListToDos, List of
-					 * IDs Ping, (Token)
+					/* Message vom Client in Teile zerlegen:
+					 * 
+					 * MessageType, token, Data, Data, Data, Data... 
+					 * 
+					 * 
+					 * CreateLogin, Username, Password 
+					 * Login, Username, Password 
+					 * ChangePasword, token, New password 
+					 * Logout, - 
+					 * CreateToDo, token, Title, Priority, Description, DueDate 
+					 * GetToDo, token, ID 
+					 * DeleteToDo, token, ID 
+					 * ListToDos, token, List of IDs 
+					 * Ping, (Token)
 					 */
 					
 					String[] messageParts = message.split(SEPARATOR);
