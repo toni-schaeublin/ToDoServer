@@ -26,9 +26,10 @@ public class ServerModel extends Thread {
 						OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());) {
 					String message = in.readLine();
 					/* Message vom Client in Teile zerlegen:
-					 * 
 					 * MessageType, token, Data, Data, Data, Data... 
+					 * und in Array speichern
 					 * 
+					 * Folgende Teile müssen vom Client gesendet werden:
 					 * 
 					 * CreateLogin, Username, Password 
 					 * Login, Username, Password 
@@ -76,10 +77,8 @@ public class ServerModel extends Thread {
 						out.flush();
 						System.out.println("false\n");
 					}
-
-					// Der Rückgabe-String muss noch entsprechend generiert werden. Idee: Switchen
-					// auf
-					// messageType
+//reply wird in den jeweiligen Methoden des Switchteils erstellt...
+					
 					String reply = ("");
 					out.write(reply);
 					out.flush();
