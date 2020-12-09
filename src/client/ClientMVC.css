@@ -10,11 +10,21 @@
 }
 
 
+.createAccountPane{	
+-fx-hgap: 100;	 	
+-fx-vgap: 100;	 	
+}
+
+
 .vbox {
+	-fx-min-width: 500px;
+	-fx-min-height: 500px;
 	-fx-padding: 50px;
 	-fx-spacing: 50px;
 }
 .hbox {
+	-fx-min-width: 500px;
+	-fx-min-height: 500px;
 	-fx-padding: 50px;
 	-fx-spacing: 50px;
 }
