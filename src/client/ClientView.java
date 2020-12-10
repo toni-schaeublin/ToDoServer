@@ -24,6 +24,13 @@ public class ClientView {
 	private Button createUserBtn = new Button("Account erstellen");
 	private Button loginBtn = new Button("Login");
 	private Button logoutBtn = new Button("Logout");
+	private Label ipLbl= new Label("Bitte geben sie die IP ein:");
+	private TextField ipTxt = new TextField();
+	private Label portLbl = new Label("Bitte geben sie die Port-Nummer ein:");
+	private TextField portTxt = new TextField();
+	private Button connectBtn = new Button("Verbinden");
+
+	
 
 	protected ClientView(Stage stage, ClientModel model) {
 		this.stage = stage;
@@ -60,6 +67,11 @@ public class ClientView {
 
 	private Pane createConnectPane() {
 		GridPane connectPane = new GridPane();
+		connectPane.add(ipLbl, 0, 0);
+		connectPane.add(ipTxt, 1, 0);
+		connectPane.add(portLbl, 0, 1);
+		connectPane.add(portTxt, 1, 1);
+		connectPane.add(connectBtn, 0, 2);
 
 		return connectPane;
 	}
