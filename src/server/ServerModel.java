@@ -10,10 +10,16 @@ public class ServerModel extends Thread {
 
 	private Integer port;
 	private final String SEPARATOR = "\\|";
-
+	Accounts accounts=new Accounts();
+	
+	private String reply = ("");
+	
 	public ServerModel(int port) {
 		super("ServerSocket");
 		this.port = port;
+
+		
+
 	}
 
 	@Override
@@ -49,7 +55,12 @@ public class ServerModel extends Thread {
 					String messageType = messageParts[0];
 					switch (messageType) {
 					case "CreateLogin":
-						System.out.println("CreateLogin");
+						int size=messageParts.length;
+						if(size==3) {
+							createLogin(messageParts[1], messageParts[2]);
+						}else {
+							reply="false";
+						}
 						break;
 					case "Login":
 						System.out.println("Login");
@@ -78,7 +89,6 @@ public class ServerModel extends Thread {
 						System.out.println("false\n");
 					}
 //reply wird in den jeweiligen Methoden des Switchteils erstellt...
-					
 					String reply = ("");
 					out.write(reply);
 					out.flush();
@@ -90,6 +100,10 @@ public class ServerModel extends Thread {
 		} catch (Exception e) {
 			System.err.println(e);
 		}
-	};
+	}
 
+	private void createLogin(String userName, String password) {
+	User user = new User(userName, password);
+	accounts.setUser(user);	
+	};
 }

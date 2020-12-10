@@ -1,10 +1,13 @@
 package server;
 
+import java.util.ArrayList;
+
 public class User {
 	private String userName;
 	private String salt;
 	private String password;
 	private String token;
+	private ArrayList<ToDo> toDos = new ArrayList<>();
 
 	public User(String userName, String password) {
 		this.userName = userName;
@@ -49,4 +52,20 @@ public class User {
 		this.token = token;
 	}
 
+	public void setToDo(ToDo toDo) {
+		toDos.add(toDo);
+	}
+
+	public ToDo getToDo(int id) {
+		ToDo toDo = null;
+		int size = toDos.size();
+		if (size > 0 && size > id) {
+			toDo = toDos.get(id);
+		}
+		return toDo;
+	}
+
+	public ArrayList<ToDo> getToDos() {
+		return toDos;
+	}
 }
