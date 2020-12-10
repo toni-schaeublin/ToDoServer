@@ -1,8 +1,5 @@
 package server;
 
-import java.util.UUID;
-
-
 public class ToDo {
 	
 	private int ID;
@@ -11,13 +8,15 @@ public class ToDo {
 	private Priority priority;
 	
 	
-	 public ToDo(int ID, String title, String description, Priority priority) {
+	 public ToDo(String title, String description, int ID, Priority priority) {
 		 this.ID = ID;
 		 this.title = title;
 		 this.description = description;
 		 this.priority = priority;
 	 }
-		 
+	public ToDo() {
+	
+	}
 	
 	//create a title
 	
@@ -35,8 +34,12 @@ public class ToDo {
 	// create random ID
 	
 	public int createID() {
-		String randomID = UUID.randomUUID().toString();
-		return ID;		
+		ID ++;
+		return ID;
+
+		//String randomID = UUID.randomUUID().toString();
+		//this.randomID = ID.toString();
+		//return ID;
 	}
 	
 	//get priority
