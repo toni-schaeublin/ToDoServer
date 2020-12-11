@@ -6,6 +6,5 @@ public class Server_Main {
 		int port = 50002;
 		ServerModel serverModel = new ServerModel(port);
 		serverModel.start();
-
 	}
 }

@@ -61,6 +61,8 @@ public class ServerModel extends Thread {
 						}else {
 							reply="false";
 						}
+						
+						
 						break;
 					case "Login":
 						System.out.println("Login");
