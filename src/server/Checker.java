@@ -73,7 +73,6 @@ public class Checker {
 					partLengthChecker = false;
 				}
 			}
-
 			if (domainParts.length >= 2 && partLengthChecker) {
 				valid = true;
 			}
