@@ -1,8 +1,12 @@
 
 
 .button {
-	-fx-min-width: 300px;
+	-fx-min-width: 150px;
 	-fx-min-height: 35px;
+	-fx-font-size: 16px;
+  //-fx-font-weight: bold;
+  	-fx-font-style: italic;
+ 	-fx-text-fill: blue;
 }
 
 .vbox {
@@ -18,11 +22,11 @@
 	-fx-spacing: 50px;
 }
 	.text-field {
-  -fx-alignment: center-right;
-   -fx-min-width: 300;
+  	-fx-alignment: center-left;
+  	-fx-min-width: 300;
     -fx-min-height: 35;
-  -fx-font-style: italic;
-  -fx-text-fill: black;
+  	-fx-font-style: italic;
+  	-fx-text-fill: black;
 	-fx-border-insets: 2px;
 	-fx-border-color: grey;
 	-fx-border-width: 1px;
@@ -31,10 +35,34 @@
 .label{
 	-fx-min-width: 300px;
 	-fx-min-height: 35px;
-	 -fx-font-size: 16px;
+	-fx-font-size: 16px;
   //-fx-font-weight: bold;
-  -fx-font-style: italic;
-  -fx-text-fill: black;
+  	-fx-font-style: italic;
+  	-fx-text-fill: grey;
+	-fx-border-insets: 2px;
+	-fx-border-color: grey;
+	-fx-border-width: 1px;
+}
+
+#status{
+	-fx-min-width: 300px;
+	-fx-min-height: 35px;
+	-fx-font-size: 12px;
+  	-fx-font-weight: bold;
+  	-fx-font-style: italic;
+  	-fx-text-fill: red;
+	-fx-border-insets: 2px;
+	-fx-border-color: none;
+	-fx-border-width: 1px;
+	
+}
+
+#txtDescription {
+  	-fx-alignment: top-left;
+  	-fx-min-width: 200;
+    -fx-min-height: 100;
+  	-fx-font-style: italic;
+  	-fx-text-fill: black;
 	-fx-border-insets: 2px;
 	-fx-border-color: grey;
 	-fx-border-width: 1px;

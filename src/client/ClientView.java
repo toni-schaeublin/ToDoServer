@@ -1,11 +1,14 @@
 package client;
 
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -29,6 +32,7 @@ public class ClientView {
 	private Label portLbl = new Label("Bitte geben sie die Port-Nummer ein:");
 	private TextField portTxt = new TextField();
 	private Button connectBtn = new Button("Verbinden");
+	private Button pingBtn = new Button("Ping");
 	private Label titleLbl = new Label("Titel:");
 	private Label priorityLbl = new Label("Priorität:");
 	private Label dateLbl = new Label("Zu erledigen bis:");
@@ -36,10 +40,7 @@ public class ClientView {
 	private TextField titleTxt = new TextField();
 	private TextField priorityTxt = new TextField();
 	private TextField dueDateTxt = new TextField();
-	private TextField descriptionTxt = new TextField();
-
-	
-	
+	private TextArea descriptionTxt = new TextArea();
 	private Button createToDoBtn = new Button("To Do erstellen");
 	private Button deleteToDoBtn = new Button("To Do löschen");
 	private Button listToDoBtn = new Button("To Do's auflisten");
@@ -49,17 +50,35 @@ public class ClientView {
 		this.stage = stage;
 		this.model = model;
 		stage.setTitle("Client");
+		statusLbl.setId("status");
+		descriptionTxt.setId("txtDescription");
+		descriptionTxt.setWrapText(true);
 		TabPane tabPane = new TabPane();
 		Tab tab1 = new Tab("To Do");
 		Tab tab2 = new Tab("Account");
 		Tab tab3 = new Tab("Connect");
+
+		HBox btnBox1 = new HBox();
+		btnBox1.getChildren().addAll(createToDoBtn, deleteToDoBtn, listToDoBtn);
+		VBox vBox1 = new VBox();
+		vBox1.getChildren().addAll(createToDoPane(), btnBox1);
+
+		HBox btnBox2 = new HBox();
+		btnBox2.getChildren().addAll(createUserBtn, loginBtn, logoutBtn);
+		VBox vBox2 = new VBox();
+		vBox2.getChildren().addAll(createAccountPane(), btnBox2);
+
+		HBox btnBox3 = new HBox();
+		btnBox3.getChildren().addAll(connectBtn, pingBtn);
+		VBox vBox3 = new VBox();
+		vBox3.getChildren().addAll(createConnectPane(), btnBox3);
+
 		tab1.setClosable(false);
 		tab2.setClosable(false);
 		tab3.setClosable(false);
-		tab1.setContent(createToDoPane());
-		tab2.setContent(createAccountPane());
-		tab3.setContent(createConnectPane());
-
+		tab1.setContent(vBox1);
+		tab2.setContent(vBox2);
+		tab3.setContent(vBox3);
 		tabPane.getTabs().addAll(tab1, tab2, tab3);
 		HBox statusBox = new HBox();
 		statusBox.getChildren().add(statusLbl);
@@ -86,7 +105,6 @@ public class ClientView {
 		connectPane.add(ipTxt, 1, 0);
 		connectPane.add(portLbl, 0, 1);
 		connectPane.add(portTxt, 1, 1);
-		connectPane.add(connectBtn, 0, 2);
 
 		return connectPane;
 	}
@@ -99,11 +117,10 @@ public class ClientView {
 		toDoPane.add(titleTxt, 1, 0);
 		toDoPane.add(priorityTxt, 1, 1);
 		toDoPane.add(dueDateTxt, 1, 2);
+		toDoPane.setHalignment(descriptionLbl, HPos.LEFT);
+		toDoPane.setValignment(descriptionLbl, VPos.TOP);
 		toDoPane.add(descriptionLbl, 0, 3);
 		toDoPane.add(descriptionTxt, 1, 3);
-
-
-
 
 		return toDoPane;
 	}
@@ -114,9 +131,6 @@ public class ClientView {
 		createAccountPane.add(createPasswordLbl, 0, 1);
 		createAccountPane.add(createUserTxt, 1, 0);
 		createAccountPane.add(createPasswordTxt, 1, 1);
-		createAccountPane.add(createUserBtn, 0, 2);
-		createAccountPane.add(loginBtn, 0, 3);
-		createAccountPane.add(logoutBtn, 0, 4);
 		return createAccountPane;
 	}
 
