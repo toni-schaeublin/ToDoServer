@@ -24,13 +24,26 @@ public class ClientView {
 	private Button createUserBtn = new Button("Account erstellen");
 	private Button loginBtn = new Button("Login");
 	private Button logoutBtn = new Button("Logout");
-	private Label ipLbl= new Label("Bitte geben sie die IP ein:");
+	private Label ipLbl = new Label("Bitte geben sie die IP ein:");
 	private TextField ipTxt = new TextField();
 	private Label portLbl = new Label("Bitte geben sie die Port-Nummer ein:");
 	private TextField portTxt = new TextField();
 	private Button connectBtn = new Button("Verbinden");
+	private Label titleLbl = new Label("Titel:");
+	private Label priorityLbl = new Label("Priorität:");
+	private Label dateLbl = new Label("Zu erledigen bis:");
+	private Label descriptionLbl = new Label("Beschreibung:");
+	private TextField titleTxt = new TextField();
+	private TextField priorityTxt = new TextField();
+	private TextField dueDateTxt = new TextField();
+	private TextField descriptionTxt = new TextField();
 
 	
+	
+	private Button createToDoBtn = new Button("To Do erstellen");
+	private Button deleteToDoBtn = new Button("To Do löschen");
+	private Button listToDoBtn = new Button("To Do's auflisten");
+	private Label statusLbl = new Label("Status");
 
 	protected ClientView(Stage stage, ClientModel model) {
 		this.stage = stage;
@@ -48,9 +61,11 @@ public class ClientView {
 		tab3.setContent(createConnectPane());
 
 		tabPane.getTabs().addAll(tab1, tab2, tab3);
+		HBox statusBox = new HBox();
+		statusBox.getChildren().add(statusLbl);
 		VBox mainWindow = new VBox();
 		mainWindow.getChildren().add(tabPane);
-
+		mainWindow.getChildren().add(statusBox);
 		Scene scene = new Scene(mainWindow);
 		scene.getStylesheets().add(getClass().getResource("ClientMVC.css").toExternalForm());
 		stage.setScene(scene);
@@ -78,6 +93,17 @@ public class ClientView {
 
 	private Pane createToDoPane() {
 		GridPane toDoPane = new GridPane();
+		toDoPane.add(titleLbl, 0, 0);
+		toDoPane.add(priorityLbl, 0, 1);
+		toDoPane.add(dateLbl, 0, 2);
+		toDoPane.add(titleTxt, 1, 0);
+		toDoPane.add(priorityTxt, 1, 1);
+		toDoPane.add(dueDateTxt, 1, 2);
+		toDoPane.add(descriptionLbl, 0, 3);
+		toDoPane.add(descriptionTxt, 1, 3);
+
+
+
 
 		return toDoPane;
 	}
