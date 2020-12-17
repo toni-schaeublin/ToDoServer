@@ -65,15 +65,39 @@ public class ServerModel extends Thread {
 						
 						break;
 					case "Login":
-						System.out.println("Login");
+						int sizeLogin = messageParts.length;
+						if(sizeLogin == 3) {
+							login(messageParts[1], messageParts[2]);
+						}else {
+							reply = "false";
+						}
+						
 						break;
 					case "ChangePassword":
-						System.out.println("ChangePassword");
+						int sizePassword = messageParts.length;
+						if( sizePassword == 3) {
+							changePassword(messageParts[2]);
+						} else {
+							reply = "not changed";
+						}
+						
+						
 						break;
 					case "Logout":
-						System.out.println("Logout");
+						int sizeLogout = messageParts.length;
+						if(sizeLogout == 3) {
+							logout(messageParts[1], messageParts[2]);
+						}else {
+							reply = " ";
+						}
+						
+					
 						break;
 					case "CreateToDo":
+						int sizeCreate = messageParts.length;
+						if(sizeCreate == 6) {
+						//	createToDo(messageParts[2], messageParts[3], messageParts[4], messageParts[5]);
+						}
 						System.out.println("CreateToDo");
 						break;
 					case "DeleteToDo":
@@ -104,8 +128,38 @@ public class ServerModel extends Thread {
 		}
 	}
 
+
+	
+
 	private void createLogin(String userName, String password) {
 	User user = new User(userName, password);
 	accounts.setUser(user);	
 	};
-}
+	
+	private void login(String userName, String password) {
+		User user = new User(userName, password);
+		accounts.setUser(user);
+	};
+	
+	private void changePassword(String password) {
+		String newValue = null;
+		if (Checker.checkPassword(newValue)){
+			password = newValue;		
+		}	
+		}
+		
+	private void logout(String userName, String password) {
+		// User vom Array löschen? 
+		User user = new User(userName, password);
+		accounts.removeUser(user);
+		
+	}
+	
+	//private void createToDo(String title, Priority priority, String description, String DueDate) {
+		
+		
+		
+	}
+	
+		
+	

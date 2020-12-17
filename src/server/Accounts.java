@@ -15,6 +15,11 @@ public class Accounts {
 	public void setUser(User user) {
 		this.users.add(user);
 	}
+	
+	public void removeUser(User user) {
+		this.users.remove(user);
+		
+	}
 
 	public User getUser(String userName) {
 		User user = null;
