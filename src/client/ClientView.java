@@ -54,19 +54,19 @@ public class ClientView {
 		descriptionTxt.setId("txtDescription");
 		descriptionTxt.setWrapText(true);
 		TabPane tabPane = new TabPane();
-		Tab tab1 = new Tab("To Do");
-		Tab tab2 = new Tab("Account");
+		Tab tab1 = new Tab("Account");
+		Tab tab2 = new Tab("ToDo");
 		Tab tab3 = new Tab("Connect");
 
 		HBox btnBox1 = new HBox();
-		btnBox1.getChildren().addAll(createToDoBtn, deleteToDoBtn, listToDoBtn);
+		btnBox1.getChildren().addAll(createUserBtn, loginBtn, logoutBtn);
 		VBox vBox1 = new VBox();
-		vBox1.getChildren().addAll(createToDoPane(), btnBox1);
+		vBox1.getChildren().addAll(createAccountPane(), btnBox1);
 
 		HBox btnBox2 = new HBox();
-		btnBox2.getChildren().addAll(createUserBtn, loginBtn, logoutBtn);
+		btnBox2.getChildren().addAll(createToDoBtn, deleteToDoBtn, listToDoBtn); 
 		VBox vBox2 = new VBox();
-		vBox2.getChildren().addAll(createAccountPane(), btnBox2);
+		vBox2.getChildren().addAll(createToDoPane(), btnBox2);
 
 		HBox btnBox3 = new HBox();
 		btnBox3.getChildren().addAll(connectBtn, pingBtn);
