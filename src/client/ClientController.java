@@ -33,6 +33,7 @@ public class ClientController {
 				this.userNameValid = true;
 			}
 		});
+
 		view.createPasswordTxt.textProperty().addListener((observable, oldValue, newValue) -> {
 			this.passwordValid = false;
 			this.password = newValue;
@@ -58,7 +59,6 @@ public class ClientController {
 		});
 
 		view.createUserBtn.setOnAction(this::addUser);
-		view.connectBtn.setOnAction(this::connectToServer);
 		view.pingBtn.setOnAction(this::ping);
 
 	}
@@ -77,69 +77,7 @@ public class ClientController {
 		}
 
 	}
-	
+
 	public void ping(ActionEvent e) {
-		message="ping";
-	
-		
-	}
-	
-	
-
-	// Stellt die Verbindung zum Server her
-	public void connectToServer(ActionEvent e) {
-		if (ipAddressValid && portNumberValid) {
-			view.statusLbl.setText("Port und IP gültig!");
-			ipAddress = view.ipTxt.getText();
-			int integerPortNumber = Integer.parseInt(view.portTxt.getText());
-			try (Socket socket = new Socket(ipAddress, integerPortNumber);
-					BufferedReader socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					OutputStreamWriter socketOut = new OutputStreamWriter(socket.getOutputStream())) {
-				view.statusLbl.setText("Verbunden");
-				Runnable r = new Runnable() {
-					@Override
-					public void run() {
-
-						while (answer != null) {
-							try {
-								answer = socketIn.readLine();
-							} catch (IOException e) {
-								answer = null;
-							}
-						}
-					}
-				};
-				
-				
-				Thread t = new Thread(r);
-				t.start();
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				socketOut.write(message);
-				socketOut.flush();
-			} catch (IOException ex) {
-				view.statusLbl.setText("Da ist etwas schief gelaufen");
-
-			}
-
-		} else {
-			if (ipAddressValid) {
-				view.statusLbl.setText("Portnummer ungültig!");
-			} else {
-				view.statusLbl.setText("IP-Adresse ungültig!");
-
-			}
-		}
-
 	}
 }
