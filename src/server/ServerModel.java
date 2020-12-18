@@ -97,13 +97,21 @@ public class ServerModel extends Thread {
 						int sizeCreate = messageParts.length;
 						if(sizeCreate == 6) {
 						//	createToDo(messageParts[2], messageParts[3], messageParts[4], messageParts[5]);
-						}
-						System.out.println("CreateToDo");
+						};
+						
 						break;
 					case "DeleteToDo":
-						System.out.println("DeleteToDo");
+						int sizeDelete = messageParts.length;
+						if(sizeDelete == 3) {
+							//deleteToDo(messageParts[3]);
+						}
+						
 						break;
 					case "ListToDos":
+						int sizeList = messageParts.length;
+						if(sizeList == 3) {
+							//ListToDo(messageParts [3]);
+						}
 						System.out.println("ListToDos");
 						break;
 					case "Ping":
@@ -155,10 +163,21 @@ public class ServerModel extends Thread {
 		
 	}
 	
-	//private void createToDo(String title, Priority priority, String description, String DueDate) {
-		
-		
-		
+	private void createToDo(String title, String priority, String description, DueDate dueDate) {
+	//	User user = new User(title, priority, description, dueDate);
+	//	toDos.add(toDo);
+			
+	}	
+	
+	private void deleteToDo(ToDo toDo) {
+		//toDos.remove(toDo);
+	}
+	
+	//private ListToDo(String title, String priority, String description, DueDate dueDate) {
+		//ToDo toDos = new ToDo(title, priority, description, dueDate);
+	//	return toDos;
+	//}
+	
 	}
 	
 		

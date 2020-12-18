@@ -2,17 +2,18 @@ package server;
 
 public class ToDo {
 	
-	private int ID;
+	private int ID = 0;
 	private String title;
 	private String description;
 	private Priority priority;
+	private DueDate dueDate;
 	
-	
-	 public ToDo(String title, String description, int ID, Priority priority) {
+	 public ToDo(String title, String description, int ID, Priority priority, DueDate dueDate) {
 		 this.ID = ID;
 		 this.title = title;
 		 this.description = description;
 		 this.priority = priority;
+		 this.dueDate = dueDate;
 	 }
 	public ToDo() {
 	
@@ -28,9 +29,11 @@ public class ToDo {
 	//create a description
 	
 	public String createDescription() {
-		return description;
+		//if (description.length() = 0 && description.length() <= 255) {
+			return description;
+		}
 		
- }
+		
 	// create random ID
 	
 	public int createID() {

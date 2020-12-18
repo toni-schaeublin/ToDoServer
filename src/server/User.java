@@ -7,7 +7,7 @@ public class User {
 	private String salt;
 	private String password;
 	private String token;
-	private ArrayList<ToDo> toDos = new ArrayList<>();
+	public ArrayList<ToDo> toDos = new ArrayList<>();
 
 	public User(String userName, String password) {
 		this.userName = userName;
