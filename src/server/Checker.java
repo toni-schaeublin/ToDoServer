@@ -95,4 +95,18 @@ public class Checker {
 		return valid;
 	}
 
+	/*
+	 * Diese Methode überprüft, ob ein String eine gültige Länge hat. Die Grenzen low und high sind inklusive!
+	 * Ist der String gültig, gibt die Methode true zurück. Sonst false.
+	 */
+	public static Boolean checkStringIsBetween(int low, int high, String testString) {
+		Boolean valid = false;
+		int length = testString.length();
+		if (length>= low && length <=high) {
+			valid = true;
+		}
+		return valid;
+	}
+	
+
 }
