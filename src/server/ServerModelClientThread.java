@@ -14,7 +14,6 @@ public class ServerModelClientThread extends Thread {
 	private String reply;
 	private Accounts accounts;
 
-
 	public ServerModelClientThread(Socket socket, Accounts accounts) {
 		this.accounts = accounts;
 		this.socket = socket;
@@ -55,7 +54,7 @@ public class ServerModelClientThread extends Thread {
 				int sizeLogin = messageParts.length;
 				if (sizeLogin == 3) {
 					if (login(messageParts[1], messageParts[2])) {
-						reply = "Result|true|" + accounts.getUser(messageParts[1]).getToken()+" \n";
+						reply = "Result|true|" + accounts.getUser(messageParts[1]).getToken() + " \n";
 					}
 				} else {
 					reply = "Result|false \n";
@@ -107,7 +106,7 @@ public class ServerModelClientThread extends Thread {
 				System.out.println("Ping");
 				break;
 			default:
-				reply="Result|false \n";
+				reply = "Result|false \n";
 			}
 			// reply wird in den jeweiligen Methoden des Switchteils erstellt...
 			out.write(reply);
@@ -116,17 +115,11 @@ public class ServerModelClientThread extends Thread {
 			System.out.println(e.toString());
 		}
 	}
-	
-	
-	
-	
-	
 
 	private Boolean createLogin(String userName, String password) {
 		Boolean valid = false;
 		try {
 			User user = new User(userName, password);
-			
 			accounts.setUser(user);
 			valid = true;
 		} catch (Exception e) {
@@ -160,9 +153,7 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private void logout(String userName, String password) {
-		// User vom Array löschen?
-		User user = new User(userName, password);
-		accounts.removeUser(user);
+		// Token vom User löschen?
 
 	}
 

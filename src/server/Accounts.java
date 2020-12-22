@@ -46,4 +46,8 @@ public class Accounts {
 		return user;
 	}
 	
+	public ArrayList getUsers() {
+		return users;
+	}
+	
 }
