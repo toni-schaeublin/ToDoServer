@@ -12,12 +12,11 @@ public class ServerModel extends Thread {
 	private final String SEPARATOR = "\\|";
 	Accounts accounts = new Accounts();
 
-	private String reply = ("");
+	private String reply = "";
 
 	public ServerModel(int port) {
 		super("ServerSocket");
 		this.port = port;
-
 	}
 
 	@Override
@@ -47,10 +46,10 @@ public class ServerModel extends Thread {
 					case "CreateLogin":
 						int size = messageParts.length;
 						if (size == 3) {
-							if (createLogin(messageParts[1], messageParts[2])) {
+							if (createLogin(messageParts[1], messageParts[2]) && Checker.checkEmail(messageParts[1])
+									&& Checker.checkPassword(messageParts[2])) {
 								reply = "Result|true";
 							}
-
 						} else {
 							reply = "Result|false";
 						}
@@ -68,7 +67,8 @@ public class ServerModel extends Thread {
 					case "ChangePassword":
 						int sizePassword = messageParts.length;
 						if (sizePassword == 3) {
-							if (changePassword(messageParts[1], messageParts[2])) {
+							if (changePassword(messageParts[1], messageParts[2])
+									&& Checker.checkPassword(messageParts[2])) {
 								reply = "Result|true";
 							}
 						} else {
