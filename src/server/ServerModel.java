@@ -10,15 +10,13 @@ public class ServerModel extends Thread {
 
 	private Integer port;
 	private final String SEPARATOR = "\\|";
-	Accounts accounts=new Accounts();
-	
+	Accounts accounts = new Accounts();
+
 	private String reply = ("");
-	
+
 	public ServerModel(int port) {
 		super("ServerSocket");
 		this.port = port;
-
-		
 
 	}
 
@@ -31,86 +29,81 @@ public class ServerModel extends Thread {
 						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 						OutputStreamWriter out = new OutputStreamWriter(socket.getOutputStream());) {
 					String message = in.readLine();
-					/* Message vom Client in Teile zerlegen:
-					 * MessageType, token, Data, Data, Data, Data... 
-					 * und in Array speichern
+					/*
+					 * Message vom Client in Teile zerlegen: MessageType, token, Data, Data, Data,
+					 * Data... und in Array speichern
 					 * 
 					 * Folgende Teile müssen vom Client gesendet werden:
 					 * 
-					 * CreateLogin, Username, Password 
-					 * Login, Username, Password 
-					 * ChangePasword, token, New password 
-					 * Logout, - 
-					 * CreateToDo, token, Title, Priority, Description, DueDate 
-					 * GetToDo, token, ID 
-					 * DeleteToDo, token, ID 
-					 * ListToDos, token, List of IDs 
-					 * Ping, (Token)
+					 * CreateLogin, Username, Password Login, Username, Password ChangePasword,
+					 * token, New password Logout, - CreateToDo, token, Title, Priority,
+					 * Description, DueDate GetToDo, token, ID DeleteToDo, token, ID ListToDos,
+					 * token, List of IDs Ping, (Token)
 					 */
-					
+
 					String[] messageParts = message.split(SEPARATOR);
-					int length = messageParts.length;
-					System.out.println(length);
-					// Testausgabe zum debuggen...
 					String messageType = messageParts[0];
 					switch (messageType) {
 					case "CreateLogin":
-						int size=messageParts.length;
-						if(size==3) {
-							createLogin(messageParts[1], messageParts[2]);
-						}else {
-							reply="false";
+						int size = messageParts.length;
+						if (size == 3) {
+							if (createLogin(messageParts[1], messageParts[2])) {
+								reply = "Result|true";
+							}
+
+						} else {
+							reply = "Result|false";
 						}
-						
-						
 						break;
 					case "Login":
 						int sizeLogin = messageParts.length;
-						if(sizeLogin == 3) {
-							login(messageParts[1], messageParts[2]);
-						}else {
-							reply = "false";
+						if (sizeLogin == 3) {
+							if (login(messageParts[1], messageParts[2])) {
+								reply = "Result|true|" + accounts.getUser(messageParts[1]).getToken();
+							}
+						} else {
+							reply = "Result|false";
 						}
-						
 						break;
 					case "ChangePassword":
 						int sizePassword = messageParts.length;
-						if( sizePassword == 3) {
-							changePassword(messageParts[2]);
+						if (sizePassword == 3) {
+							if (changePassword(messageParts[1], messageParts[2])) {
+								reply = "Result|true";
+							}
 						} else {
-							reply = "not changed";
+							reply = "Result|false";
 						}
-						
-						
+
 						break;
 					case "Logout":
 						int sizeLogout = messageParts.length;
-						if(sizeLogout == 3) {
+						if (sizeLogout == 3) {
 							logout(messageParts[1], messageParts[2]);
-						}else {
-							reply = " ";
+						} else {
+							reply = "Result|false";
 						}
-						
-					
+
 						break;
 					case "CreateToDo":
 						int sizeCreate = messageParts.length;
-						if(sizeCreate == 6) {
-						//	createToDo(messageParts[2], messageParts[3], messageParts[4], messageParts[5]);
-						};
-						
+						if (sizeCreate == 6) {
+							// createToDo(messageParts[2], messageParts[3], messageParts[4],
+							// messageParts[5]);
+						}
+
 						break;
 					case "DeleteToDo":
 						int sizeDelete = messageParts.length;
-						if(sizeDelete == 3) {
-							//deleteToDo(messageParts[3]);
+						if (sizeDelete == 3) {
+							// deleteToDo(messageParts[3]);
 						}
-						
+
 						break;
 					case "ListToDos":
 						int sizeList = messageParts.length;
-						if(sizeList == 3) {
-							//ListToDo(messageParts [3]);
+						if (sizeList == 3) {
+							// ListToDo(messageParts [3]);
 						}
 						System.out.println("ListToDos");
 						break;
@@ -136,49 +129,62 @@ public class ServerModel extends Thread {
 		}
 	}
 
-
-	
-
-	private void createLogin(String userName, String password) {
-	User user = new User(userName, password);
-	accounts.setUser(user);	
-	};
-	
-	private void login(String userName, String password) {
-		User user = new User(userName, password);
-		accounts.setUser(user);
-	};
-	
-	private void changePassword(String password) {
-		String newValue = null;
-		if (Checker.checkPassword(newValue)){
-			password = newValue;		
-		}	
+	private Boolean createLogin(String userName, String password) {
+		Boolean valid = false;
+		try {
+			User user = new User(userName, password);
+			accounts.setUser(user);
+			valid = true;
+		} catch (Exception e) {
+			System.out.println("Da ist etwas schief gelaufen! " + e);
 		}
-		
+		return valid;
+	}
+
+	private Boolean login(String userName, String password) {
+		Boolean valid = false;
+		try {
+			valid = accounts.getUser(userName).getPassword().equals(password);
+			String token = Checker.createToken();
+			accounts.getUser(userName).setToken(token);
+		} catch (Exception e) {
+			System.out.println("Da ist etwas schief gelaufen! " + e);
+		}
+		return valid;
+	}
+
+	private Boolean changePassword(String token, String password) {
+		Boolean valid = false;
+		try {
+			accounts.getUserFromToken(token).setPassword(password);
+			valid = true;
+		} catch (Exception e) {
+			System.out.println("Da ist etwas schief gelaufen! " + e);
+		}
+		return valid;
+	}
+
 	private void logout(String userName, String password) {
-		// User vom Array löschen? 
+		// User vom Array löschen?
 		User user = new User(userName, password);
 		accounts.removeUser(user);
-		
+
 	}
-	
+
 	private void createToDo(String title, String priority, String description, DueDate dueDate) {
-	//	User user = new User(title, priority, description, dueDate);
-	//	toDos.add(toDo);
-			
-	}	
-	
+		// User user = new User(title, priority, description, dueDate);
+		// toDos.add(toDo);
+
+	}
+
 	private void deleteToDo(ToDo toDo) {
-		//toDos.remove(toDo);
+		// toDos.remove(toDo);
 	}
-	
-	//private ListToDo(String title, String priority, String description, DueDate dueDate) {
-		//ToDo toDos = new ToDo(title, priority, description, dueDate);
-	//	return toDos;
-	//}
-	
-	}
-	
-		
-	
+
+	// private ListToDo(String title, String priority, String description, DueDate
+	// dueDate) {
+	// ToDo toDos = new ToDo(title, priority, description, dueDate);
+	// return toDos;
+	// }
+
+}

@@ -27,8 +27,23 @@ public class Accounts {
 		for (User u : this.users) {
 			if (u.getUserName().equals(userName)) {
 				user = this.users.get(i);
+				i++;
 			}
 		}
 		return user;
 	}
+	
+	
+	public User getUserFromToken(String token) {
+		User user = null;
+		int i = 0;
+		for (User u : this.users) {
+			if (u.getToken().equals(token)) {
+				user = this.users.get(i);
+				i++;
+			}
+		}
+		return user;
+	}
+	
 }
