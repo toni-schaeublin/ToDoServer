@@ -8,11 +8,12 @@ public class ToDo {
 	private Priority priority;
 	private DueDate dueDate;
 	
-	 public ToDo(String title, String description, int ID, Priority priority, DueDate dueDate) {
+	 public ToDo(String title, String description, int ID, String priority, DueDate dueDate) {
 		 this.ID = ID;
 		 this.title = title;
 		 this.description = description;
-		 this.priority = priority;
+		 // Umwandeln des Parameters priority in type Priority
+		 this.priority = Priority.valueOf(priority);
 		 this.dueDate = dueDate;
 	 }
 	public ToDo() {

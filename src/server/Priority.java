@@ -4,7 +4,8 @@ public enum Priority {
 	
 	Low, Medium, High,;
 
-	public void set(String object) {
+	public void set (String p) {
+		//this.p.set(p.toString());
 		
 		
 	}
@@ -13,4 +14,8 @@ public enum Priority {
 		return null;
 	}
 
-}
+	
+		
+	}
+
+
