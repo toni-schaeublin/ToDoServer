@@ -113,7 +113,7 @@ public class Checker {
 		return valid;
 	}
 	/*
-	 * Diese Methode erstellt einen zufälligen String aus 20 Zeichen und gibt diesen als Token zurück
+	 * Diese Methode erstellt einen zufälligen String und gibt diesen als Token zurück
 	 */
 	public static String createToken() {
 		String token;
@@ -152,6 +152,14 @@ public class Checker {
 				valid = false;
 			}
 		}
+		return valid;
+	}
+	
+	public static Boolean checkPriority(String priority) {
+		Boolean valid = false;
+		
+		
+		
 		return valid;
 	}
 	

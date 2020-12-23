@@ -47,10 +47,12 @@ public class ServerModelClientThread extends Thread {
 				switch (messageType) {
 				case "CreateLogin":
 					int size = messageParts.length;
-					if (size == 3 && Checker.freeUsername(messageParts[1], this.accounts)) {
-						if (createLogin(messageParts[1], messageParts[2]) && Checker.checkEmail(messageParts[1])
-								&& Checker.checkPassword(messageParts[2])) {
+					if (size == 3 && Checker.freeUsername(messageParts[1], this.accounts)
+							&& Checker.checkEmail(messageParts[1]) && Checker.checkPassword(messageParts[2])) {
+						if (createLogin(messageParts[1], messageParts[2])) {
 							reply = "Result|true \n";
+						} else {
+							reply = "Result|false \n";
 						}
 					} else {
 						reply = "Result|false \n";
@@ -61,6 +63,8 @@ public class ServerModelClientThread extends Thread {
 					if (sizeLogin == 3) {
 						if (login(messageParts[1], messageParts[2])) {
 							reply = "Result|true|" + accounts.getUser(messageParts[1]).getToken() + " \n";
+						}else {
+							reply = "Result|false \n";
 						}
 					} else {
 						reply = "Result|false \n";
@@ -68,10 +72,11 @@ public class ServerModelClientThread extends Thread {
 					break;
 				case "ChangePassword":
 					int sizePassword = messageParts.length;
-					if (sizePassword == 3) {
-						if (changePassword(messageParts[1], messageParts[2])
-								&& Checker.checkPassword(messageParts[2])) {
+					if (sizePassword == 3 && Checker.checkPassword(messageParts[2])) {
+						if (changePassword(messageParts[1], messageParts[2])) {
 							reply = "Result|true \n";
+						}else {
+							reply = "Result|false \n";
 						}
 					} else {
 						reply = "Result|false \n";
@@ -80,8 +85,12 @@ public class ServerModelClientThread extends Thread {
 					break;
 				case "Logout":
 					int sizeLogout = messageParts.length;
-					if (sizeLogout == 3) {
-						logout(messageParts[1], messageParts[2]);
+					if (sizeLogout == 2) {
+						if (logout(messageParts[1])) {
+							reply = "Result|true \n";
+						}else {
+							reply = "Result|false \n";
+						}
 					} else {
 						reply = "Result|false \n";
 					}
@@ -89,9 +98,16 @@ public class ServerModelClientThread extends Thread {
 					break;
 				case "CreateToDo":
 					int sizeCreate = messageParts.length;
-					if (sizeCreate == 6) {
-						// createToDo(messageParts[2], messageParts[3], messageParts[4],
-						// messageParts[5]);
+					if (sizeCreate == 5 && Checker.checkStringIsBetween(3, 20, messageParts[2])
+							&& Checker.checkPriority(messageParts[3])
+							&& Checker.checkStringIsBetween(0, 255, messageParts[4])) {
+						if (createToDo(messageParts[2], messageParts[3], messageParts[4])) {
+							reply = "Result|true \n";
+						}else {
+							reply = "Result|false \n";
+						}
+					} else {
+						reply = "Result|false \n";
 					}
 
 					break;
@@ -138,37 +154,48 @@ public class ServerModelClientThread extends Thread {
 
 	private Boolean login(String userName, String password) {
 		Boolean valid = false;
-		try {
-			valid = accounts.getUser(userName).getPassword().equals(password);
-			String token = Checker.createToken();
-			accounts.getUser(userName).setToken(token);
-			System.out.println(accounts.getUser(userName).getToken());
-		} catch (Exception e) {
-			System.out.println("Da ist etwas schief gelaufen! " + e);
+		int size = accounts.getUsers().size();
+		if (size > 0) {
+			try {
+				valid = accounts.getUser(userName).getPassword().equals(password);
+				if (valid) {
+					String token = Checker.createToken();
+					accounts.getUser(userName).setToken(token);
+				}
+			} catch (Exception e) {
+				System.out.println("Da ist etwas schief gelaufen! " + e);
+			}
 		}
 		return valid;
 	}
 
 	private Boolean changePassword(String token, String password) {
 		Boolean valid = false;
-		try {
-			accounts.getUserFromToken(token).setPassword(password);
-			valid = true;
-		} catch (Exception e) {
-			System.out.println("Da ist etwas schief gelaufen! " + e);
+		int size = accounts.getUsers().size();
+		if (size > 0) {
+			try {
+				accounts.getUserFromToken(token).setPassword(password);
+				valid = true;
+			} catch (Exception e) {
+				System.out.println("Da ist etwas schief gelaufen! " + e);
+			}
 		}
 		return valid;
 	}
 
-	private void logout(String userName, String password) {
+	private Boolean logout(String token) {
+		Boolean valid = false;
+
 		// Token vom User löschen?
+
+		return valid;
 
 	}
 
-	private void createToDo(String title, String priority, String description, DueDate dueDate) {
-		// User user = new User(title, priority, description, dueDate);
+	private Boolean createToDo(String title, String priority, String description) {
+		Boolean valid = false;// User user = new User(title, priority, description, dueDate);
 		// toDos.add(toDo);
-
+		return valid;
 	}
 
 	private void deleteToDo(ToDo toDo) {

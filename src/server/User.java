@@ -54,8 +54,12 @@ public class User {
 	public ToDo getToDo(int id) {
 		ToDo toDo = null;
 		int size = toDos.size();
-		if (size > 0 && size > id) {
-			toDo = toDos.get(id);
+		if (size > 0) {
+			for (ToDo t : toDos) {
+				if (t.getID() == id) {
+					toDo = t;
+				}
+			}
 		}
 		return toDo;
 	}

@@ -12,6 +12,7 @@ public class ServerModel extends Thread {
 	private Integer port;
 	private Accounts accounts = new Accounts();
 	private ServerSocket listener;
+	public static int ID=0;
 
 	public ServerModel() {
 		super("ServerSocketThread");
