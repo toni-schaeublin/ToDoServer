@@ -11,17 +11,19 @@ public class ServerModel extends Thread {
 
 	private Integer port;
 	private Accounts accounts = new Accounts();
+	private ServerSocket listener;
 
 	public ServerModel() {
-		super("ServerSocket");
+		super("ServerSocketThread");
 	}
 
 	@Override
 	public void run() {
-		try (ServerSocket listener = new ServerSocket(port, 10, null)) {
+		try {
+			listener = new ServerSocket(port, 10, null);
 			while (true) {
 				Socket socket = listener.accept();
-				ServerModelClientThread client = new ServerModelClientThread(socket, accounts);
+				ServerModelClientThread client = new ServerModelClientThread(this, socket);
 				client.start();
 			}
 		} catch (Exception e) {
@@ -32,5 +34,8 @@ public class ServerModel extends Thread {
 	public void setPort(Integer port) {
 		this.port = port;
 	}
-	
+
+	public Accounts getAccounts() {
+		return this.accounts;
+	}
 }
