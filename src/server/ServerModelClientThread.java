@@ -41,7 +41,7 @@ public class ServerModelClientThread extends Thread {
 			switch (messageType) {
 			case "CreateLogin":
 				int size = messageParts.length;
-				if (size == 3) {
+				if (size == 3 && Checker.freeUsername(messageParts[1], this.accounts)) {
 					if (createLogin(messageParts[1], messageParts[2]) && Checker.checkEmail(messageParts[1])
 							&& Checker.checkPassword(messageParts[2])) {
 						reply = "Result|true \n";

@@ -3,6 +3,7 @@ package server;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /*Diese Klasse stellt statische Methoden zur Überprüfung von IP-Adresse, Portnummer, Email-Adresse und Passwort zur Verfügung. 
  * Die Methoden können mit Checker.methodenName(String) aufgerufen werden. Den Methoden muss jeweils ein String übergeben werden. 
@@ -132,6 +133,24 @@ public class Checker {
 		LocalDateTime now = LocalDateTime.now();
 		if (dateTime.isBefore(now)) {
 			valid = true;
+		}
+		return valid;
+	}
+	
+	
+	/*
+	 * Diese Methode überprüft ob der userName noch nicht vergeben ist und gibt true zurück, wenn das so ist.
+	 */
+	public static Boolean freeUsername(String userName, Accounts accounts) {
+		Boolean valid = true;
+		ArrayList<User> users = new ArrayList<User>();
+		users=accounts.getUsers();
+		int size=users.size();
+		System.out.println(size);
+		for(User u:users) {
+			if(u.getUserName().equals(userName)) {
+				valid = false;
+			}
 		}
 		return valid;
 	}

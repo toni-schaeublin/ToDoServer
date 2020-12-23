@@ -45,9 +45,9 @@ public class Accounts {
 		}
 		return user;
 	}
-	
-	public ArrayList getUsers() {
-		return users;
+	public ArrayList<User> getUsers(){
+		
+		return this.users;
 	}
 	
 }

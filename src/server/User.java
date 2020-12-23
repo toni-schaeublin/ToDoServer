@@ -15,11 +15,6 @@ public class User {
 		this.token = "";
 	}
 
-	public User() {
-		this.token = "";
-
-	}
-
 	public String getUserName() {
 		return userName;
 	}
