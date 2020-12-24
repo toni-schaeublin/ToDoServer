@@ -63,7 +63,7 @@ public class ServerModelClientThread extends Thread {
 					if (sizeLogin == 3) {
 						if (login(messageParts[1], messageParts[2])) {
 							reply = "Result|true|" + accounts.getUser(messageParts[1]).getToken() + " \n";
-						}else {
+						} else {
 							reply = "Result|false \n";
 						}
 					} else {
@@ -75,7 +75,7 @@ public class ServerModelClientThread extends Thread {
 					if (sizePassword == 3 && Checker.checkPassword(messageParts[2])) {
 						if (changePassword(messageParts[1], messageParts[2])) {
 							reply = "Result|true \n";
-						}else {
+						} else {
 							reply = "Result|false \n";
 						}
 					} else {
@@ -88,7 +88,7 @@ public class ServerModelClientThread extends Thread {
 					if (sizeLogout == 2) {
 						if (logout(messageParts[1])) {
 							reply = "Result|true \n";
-						}else {
+						} else {
 							reply = "Result|false \n";
 						}
 					} else {
@@ -103,7 +103,7 @@ public class ServerModelClientThread extends Thread {
 							&& Checker.checkStringIsBetween(0, 255, messageParts[4])) {
 						if (createToDo(messageParts[2], messageParts[3], messageParts[4])) {
 							reply = "Result|true \n";
-						}else {
+						} else {
 							reply = "Result|false \n";
 						}
 					} else {
@@ -183,11 +183,24 @@ public class ServerModelClientThread extends Thread {
 		return valid;
 	}
 
+//Beim Logout muss der Token mitgegeben werden, damit der User identifiziert werden kann!
+	
 	private Boolean logout(String token) {
 		Boolean valid = false;
-
-		// Token vom User löschen?
-
+		int size = accounts.getUsers().size();
+		if (size > 0) {
+			try {
+				/*
+				 * Beim Logout wird dem User ein unbekannter und zufälliger Token zugewiesen.
+				 * Somit ist sichergestellt, dass man nicht mit einem leeren String oder null
+				 * auf die Daten des Users zugreifen kann!
+				 */
+				accounts.getUserFromToken(token).setToken(Checker.createToken());
+				valid = true;
+			} catch (Exception e) {
+				System.out.println("Da ist etwas schief gelaufen! " + e);
+			}
+		}
 		return valid;
 
 	}
