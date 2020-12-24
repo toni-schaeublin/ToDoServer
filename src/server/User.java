@@ -45,10 +45,11 @@ public class User {
 
 	public void setToken(String token) {
 		this.token = token;
-	}
 
-	public void setToDo(ToDo toDo) {
-		toDos.add(toDo);
+	}
+	
+	public void addToDo(ToDo toDo) {
+		this.toDos.add(toDo);
 	}
 
 	public ToDo getToDo(int id) {

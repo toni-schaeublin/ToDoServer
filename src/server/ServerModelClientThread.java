@@ -14,6 +14,7 @@ public class ServerModelClientThread extends Thread {
 	private BufferedReader in;
 	private Accounts accounts;
 	private Socket socket;
+	private int specificID;
 
 	public ServerModelClientThread(ServerModel server, Socket socket) {
 		super("Client " + nextClientID++);
@@ -60,7 +61,7 @@ public class ServerModelClientThread extends Thread {
 					int sizeLogin = messageParts.length;
 					if (sizeLogin == 3) {
 						if (login(messageParts[1], messageParts[2])) {
-							reply = "Result|true|" + accounts.getUser(messageParts[1]).getToken() + " \n";
+							reply = "Result|true|" + accounts.getUser(messageParts[1]).getToken() + "\n";
 						} else {
 							reply = "Result|false \n";
 						}
@@ -97,14 +98,16 @@ public class ServerModelClientThread extends Thread {
 				case "CreateToDo":
 					int sizeCreate = messageParts.length;
 					if (sizeCreate == 5 && Checker.checkStringIsBetween(3, 20, messageParts[2])
-							&& Checker.checkPriority(messageParts[3])
+							/*&& Checker.checkPriority(messageParts[3])*/
 							&& Checker.checkStringIsBetween(0, 255, messageParts[4])) {
-						if (createToDo(messageParts[2], messageParts[3], messageParts[4])) {
-							reply = "Result|true \n";
+						System.out.println("Methode CreateToDo wird aufgerufen");
+						if (createToDo(messageParts[1], messageParts[2], messageParts[3], messageParts[4])) {
+							reply = "Result|true|" + this.specificID + "\n";
 						} else {
 							reply = "Result|false \n";
 						}
 					} else {
+						System.out.println("Methode CreateToDo wird nicht aufgerufen");
 						reply = "Result|false \n";
 					}
 
@@ -182,7 +185,7 @@ public class ServerModelClientThread extends Thread {
 	}
 
 //Beim Logout muss der Token mitgegeben werden, damit der User identifiziert werden kann!
-	
+
 	private Boolean logout(String token) {
 		Boolean valid = false;
 		int size = accounts.getUsers().size();
@@ -203,9 +206,21 @@ public class ServerModelClientThread extends Thread {
 
 	}
 
-	private Boolean createToDo(String title, String priority, String description) {
-		Boolean valid = false;// User user = new User(title, priority, description, dueDate);
-		// toDos.add(toDo);
+	private Boolean createToDo(String token, String title, String priority, String description) {
+		Boolean valid = false;
+		int size = accounts.getUsers().size();
+		if (size > 0) {
+			try {
+				System.out.println("Im try CreateToDo");
+				ServerModel.ID++;
+				specificID = ServerModel.ID;
+				ToDo toDo = new ToDo(specificID, title, priority, description);
+				accounts.getUserFromToken(token).addToDo(toDo);
+				valid = true;
+			} catch (Exception e) {
+				System.out.println("Da ist etwas schief gelaufen! " + e);
+			}
+		}
 		return valid;
 	}
 

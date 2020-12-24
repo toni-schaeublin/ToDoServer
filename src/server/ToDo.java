@@ -7,17 +7,15 @@ public class ToDo {
 	private Priority priority;
 	private String dueDate;
 
-	public ToDo(String title, String priority, String description) {
-		ServerModel.ID++;
-		this.ID=ServerModel.ID;
+	public ToDo(int id, String title, String priority, String description) {
+		this.ID = id;
 		this.title = title;
 		this.description = description;
 		this.priority = Priority.valueOf(priority);
 	}
 
-	public ToDo(String title, String priority, String description, String dueDate) {
-		ServerModel.ID++;
-		this.ID=ServerModel.ID;
+	public ToDo(int id, String title, String priority, String description, String dueDate) {
+		this.ID = id;
 		this.title = title;
 		this.description = description;
 		this.priority = Priority.valueOf(priority);
@@ -42,7 +40,7 @@ public class ToDo {
 
 	// get priority
 	public String getPriority() {
-		return this.priority.get();
+		return this.priority.toString();
 	}
 
 	// set priority
@@ -57,6 +55,7 @@ public class ToDo {
 	public String getDueDate() {
 		return this.dueDate;
 	}
+
 	public int getID() {
 		return this.ID;
 	}
