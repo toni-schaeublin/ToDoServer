@@ -49,12 +49,12 @@ public class ServerModelClientThread extends Thread {
 					if (size == 3 && Checker.freeUsername(messageParts[1], this.accounts)
 							&& Checker.checkEmail(messageParts[1]) && Checker.checkPassword(messageParts[2])) {
 						if (createLogin(messageParts[1], messageParts[2])) {
-							reply = "Result|true \n";
+							reply = "Result|true\n";
 						} else {
-							reply = "Result|false \n";
+							reply = "Result|false\n";
 						}
 					} else {
-						reply = "Result|false \n";
+						reply = "Result|false\n";
 					}
 					break;
 				case "Login":
@@ -63,22 +63,22 @@ public class ServerModelClientThread extends Thread {
 						if (login(messageParts[1], messageParts[2])) {
 							reply = "Result|true|" + accounts.getUser(messageParts[1]).getToken() + "\n";
 						} else {
-							reply = "Result|false \n";
+							reply = "Result|false\n";
 						}
 					} else {
-						reply = "Result|false \n";
+						reply = "Result|false\n";
 					}
 					break;
 				case "ChangePassword":
 					int sizePassword = messageParts.length;
 					if (sizePassword == 3 && Checker.checkPassword(messageParts[2])) {
 						if (changePassword(messageParts[1], messageParts[2])) {
-							reply = "Result|true \n";
+							reply = "Result|true\n";
 						} else {
-							reply = "Result|false \n";
+							reply = "Result|false\n";
 						}
 					} else {
-						reply = "Result|false \n";
+						reply = "Result|false\n";
 					}
 
 					break;
@@ -86,51 +86,61 @@ public class ServerModelClientThread extends Thread {
 					int sizeLogout = messageParts.length;
 					if (sizeLogout == 2) {
 						if (logout(messageParts[1])) {
-							reply = "Result|true \n";
+							reply = "Result|true\n";
 						} else {
-							reply = "Result|false \n";
+							reply = "Result|false\n";
 						}
 					} else {
-						reply = "Result|false \n";
+						reply = "Result|false\n";
 					}
 
 					break;
 				case "CreateToDo":
 					int sizeCreate = messageParts.length;
 					if (sizeCreate == 5 && Checker.checkStringIsBetween(3, 20, messageParts[2])
-							/*&& Checker.checkPriority(messageParts[3])*/
+					/* && Checker.checkPriority(messageParts[3]) */
 							&& Checker.checkStringIsBetween(0, 255, messageParts[4])) {
 						System.out.println("Methode CreateToDo wird aufgerufen");
 						if (createToDo(messageParts[1], messageParts[2], messageParts[3], messageParts[4])) {
 							reply = "Result|true|" + this.specificID + "\n";
 						} else {
-							reply = "Result|false \n";
+							reply = "Result|false\n";
 						}
 					} else {
 						System.out.println("Methode CreateToDo wird nicht aufgerufen");
-						reply = "Result|false \n";
+						reply = "Result|false\n";
 					}
 
 					break;
 				case "DeleteToDo":
 					int sizeDelete = messageParts.length;
 					if (sizeDelete == 3) {
-						// deleteToDo(messageParts[3]);
+						try {
+							int id = Integer.parseInt(messageParts[2]);
+							if (deleteToDo(messageParts[1], id)) {
+								reply = "Result|true\n";
+							} else {
+								reply = "Result|false\n";
+							}
+						} catch (Exception e) {
+							System.out.println("Da ist etwas schief gelaufen! " + e);
+							reply = "Result|false\n";
+						}
+					} else {
+						reply = "Result|false\n";
 					}
-
 					break;
 				case "ListToDos":
 					int sizeList = messageParts.length;
 					if (sizeList == 3) {
 						// ListToDo(messageParts [3]);
 					}
-					System.out.println("ListToDos");
 					break;
 				case "Ping":
 					System.out.println("Ping");
 					break;
 				default:
-					reply = "Result|false \n";
+					reply = "Result|false\n";
 				}
 				// reply wird in den jeweiligen Methoden des Switchteils erstellt...
 				out.write(reply);
@@ -224,8 +234,10 @@ public class ServerModelClientThread extends Thread {
 		return valid;
 	}
 
-	private void deleteToDo(ToDo toDo) {
-		// toDos.remove(toDo);
+	private Boolean deleteToDo(String token, int id) {
+		Boolean valid = false;
+
+		return valid;
 	}
 
 // private ListToDo(String title, String priority, String description, DueDate
