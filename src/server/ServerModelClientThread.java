@@ -242,7 +242,12 @@ public class ServerModelClientThread extends Thread {
 
 	private Boolean deleteToDo(String token, int id) {
 		Boolean valid = false;
-
+		try {
+			accounts.getUserFromToken(token).getToDos().remove(id);
+			valid = true;
+		} catch (Exception e) {
+			System.out.println("Da ist etwas schief gelaufen! " + e);
+		}
 		return valid;
 	}
 
