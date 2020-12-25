@@ -41,7 +41,7 @@ public class ServerModelClientThread extends Thread {
 				 * Description, DueDate GetToDo, token, ID DeleteToDo, token, ID ListToDos,
 				 * token, List of IDs Ping, (Token)
 				 */
-				String[] messageParts = message.split(SEPARATOR);
+				String[] messageParts = message.split(SEPARATOR, -1);
 				String messageType = messageParts[0];
 				switch (messageType) {
 				case "CreateLogin":
@@ -98,7 +98,7 @@ public class ServerModelClientThread extends Thread {
 				case "CreateToDo":
 					int sizeCreate = messageParts.length;
 					if (sizeCreate == 5 && Checker.checkStringIsBetween(3, 20, messageParts[2])
-					/* && Checker.checkPriority(messageParts[3]) */
+							&& Checker.checkPriority(messageParts[3])
 							&& Checker.checkStringIsBetween(0, 255, messageParts[4])) {
 						System.out.println("Methode CreateToDo wird aufgerufen");
 						if (createToDo(messageParts[1], messageParts[2], messageParts[3], messageParts[4])) {
@@ -111,6 +111,12 @@ public class ServerModelClientThread extends Thread {
 						reply = "Result|false\n";
 					}
 
+					break;
+				case "GetToDo":
+					int sizeGet = messageParts.length;
+					if (sizeGet == 3) {
+						// ListToDo(messageParts [3]);
+					}
 					break;
 				case "DeleteToDo":
 					int sizeDelete = messageParts.length;

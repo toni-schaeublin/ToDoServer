@@ -157,9 +157,7 @@ public class Checker {
 	
 	public static Boolean checkPriority(String priority) {
 		Boolean valid = false;
-		
-		
-		
+		valid=Priority.isPriority(priority);
 		return valid;
 	}
 	
