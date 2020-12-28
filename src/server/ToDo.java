@@ -1,11 +1,13 @@
 package server;
 
+import java.time.LocalDate;
+
 public class ToDo {
 	private int ID;
 	private String title;
 	private String description;
 	private Priority priority;
-	private String dueDate;
+	private LocalDate dueDate;
 
 	public ToDo(int id, String title, String priority, String description) {
 		this.ID = id;
@@ -19,7 +21,7 @@ public class ToDo {
 		this.title = title;
 		this.description = description;
 		this.priority = Priority.valueOf(priority);
-		this.dueDate = dueDate;
+		this.dueDate = LocalDate.parse(dueDate);
 	}
 
 	public void setTitle(String title) {
@@ -49,11 +51,12 @@ public class ToDo {
 	}
 
 	public void setDueDate(String dueDate) {
-		this.dueDate = dueDate;
+		this.dueDate = LocalDate.parse(dueDate);
 	}
 
 	public String getDueDate() {
-		return this.dueDate;
+		String returnValue = this.dueDate.toString();
+		return returnValue;
 	}
 
 	public int getID() {

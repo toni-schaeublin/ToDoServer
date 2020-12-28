@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ServerModelClientThread extends Thread {
 	private static int nextClientID = 0;
@@ -15,6 +16,8 @@ public class ServerModelClientThread extends Thread {
 	private Accounts accounts;
 	private Socket socket;
 	private int specificID;
+	private ToDo toDo;
+	private ArrayList<ToDo> toDos = new ArrayList<>();
 
 	public ServerModelClientThread(ServerModel server, Socket socket) {
 		super("Client " + nextClientID++);
@@ -100,14 +103,12 @@ public class ServerModelClientThread extends Thread {
 					if (sizeCreate == 5 && Checker.checkStringIsBetween(3, 20, messageParts[2])
 							&& Checker.checkPriority(messageParts[3])
 							&& Checker.checkStringIsBetween(0, 255, messageParts[4])) {
-						System.out.println("Methode CreateToDo wird aufgerufen");
 						if (createToDo(messageParts[1], messageParts[2], messageParts[3], messageParts[4])) {
 							reply = "Result|true|" + this.specificID + "\n";
 						} else {
 							reply = "Result|false\n";
 						}
 					} else {
-						System.out.println("Methode CreateToDo wird nicht aufgerufen");
 						reply = "Result|false\n";
 					}
 
@@ -115,7 +116,38 @@ public class ServerModelClientThread extends Thread {
 				case "GetToDo":
 					int sizeGet = messageParts.length;
 					if (sizeGet == 3) {
-						// ListToDo(messageParts [3]);
+						try {
+							int id = Integer.parseInt(messageParts[2]);
+							if (getToDo(messageParts[1], id)) {
+								String returnId = Integer.toString(toDo.getID());
+								String title = toDo.getTitle();
+								String priority = toDo.getPriority();
+								String description = toDo.getDescription();
+								String dueDate = "";
+								Boolean withDueDate = false;
+								try {
+									dueDate = toDo.getDueDate();
+									withDueDate = true;
+								} catch (Exception e) {
+									System.out.println("ToDo ohne dueDate");
+									withDueDate = false;
+								}
+								if (withDueDate) {
+									reply = "Result|true|" + returnId + "|" + title + "|" + priority + "|" + description
+											+ "|" + dueDate + "\n";
+								} else {
+									reply = "Result|true|" + returnId + "|" + title + "|" + priority + "|" + description
+											+ "\n";
+								}
+							} else {
+								reply = "Result|false\n";
+							}
+						} catch (Exception e) {
+							System.out.println("Da ist etwas schief gelaufen! " + e);
+							reply = "Result|false\n";
+						}
+					} else {
+						reply = "Result|false\n";
 					}
 					break;
 				case "DeleteToDo":
@@ -138,8 +170,22 @@ public class ServerModelClientThread extends Thread {
 					break;
 				case "ListToDos":
 					int sizeList = messageParts.length;
-					if (sizeList == 3) {
-						// ListToDo(messageParts [3]);
+					if (sizeList == 2) {
+						try {
+							if(listToDos(messageParts[1])) {
+								reply="Result|true";
+								for(ToDo t:toDos) {
+									reply.concat("|"+t.getID());
+								}
+								reply.concat("\n");
+							}
+
+						} catch (Exception e) {
+							System.out.println("Da ist etwas schief gelaufen! " + e);
+							reply = "Result|false\n";
+						}
+					} else {
+						reply = "Result|false\n";
 					}
 					break;
 				case "Ping":
@@ -251,10 +297,27 @@ public class ServerModelClientThread extends Thread {
 		return valid;
 	}
 
-// private ListToDo(String title, String priority, String description, DueDate
-// dueDate) {
-// ToDo toDos = new ToDo(title, priority, description, dueDate);
-// return toDos;
-// }
+	private Boolean getToDo(String token, int id) {
+		Boolean valid = false;
+		try {
+			toDo = accounts.getUserFromToken(token).getToDos().get(id);
+			valid = true;
+		} catch (Exception e) {
+			System.out.println("Da ist etwas schief gelaufen! " + e);
+		}
+		return valid;
+	}
+
+	private Boolean listToDos(String token) {
+		Boolean valid = false;
+		try {
+			toDos = accounts.getUserFromToken(token).getToDos();
+			valid = true;
+		} catch (Exception e) {
+			System.out.println("Da ist etwas schief gelaufen! " + e);
+		}
+		return valid;
+
+	}
 
 }

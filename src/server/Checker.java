@@ -128,10 +128,10 @@ public class Checker {
 	/*
 	 * Diese Methode überprüft ob LocalDateTime dateTime in der Zukunft liegt und gibt true zurück, wenn das so ist.
 	 */
-	public static Boolean checkDate(LocalDateTime dateTime) {
+	public static Boolean checkDate(LocalDate date) {
 		Boolean valid = false;
-		LocalDateTime now = LocalDateTime.now();
-		if (dateTime.isBefore(now)) {
+		LocalDate now = LocalDate.now();
+		if (date.isBefore(now)||date.equals(now)) {
 			valid = true;
 		}
 		return valid;
