@@ -12,7 +12,7 @@ public class ServerModel extends Thread {
 	private Integer port;
 	private Accounts accounts = new Accounts();
 	private ServerSocket listener;
-	public static int ID=0;
+	public static int ID = 0;
 
 	public ServerModel() {
 		super("ServerSocketThread");
@@ -38,5 +38,13 @@ public class ServerModel extends Thread {
 
 	public Accounts getAccounts() {
 		return this.accounts;
+	}
+
+	public void safeData() {
+		// Daten aus den Arrays in txt-File speichern
+	}
+
+	public void loadData() {
+		// Daten aus den txt-File in Arrays speichern
 	}
 }

@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 
 /*Diese Klasse stellt statische Methoden zur Überprüfung von IP-Adresse, Portnummer, Email-Adresse und Passwort zur Verfügung. 
  * Die Methoden können mit Checker.methodenName(String) aufgerufen werden. Den Methoden muss jeweils ein String übergeben werden. 
@@ -101,64 +102,65 @@ public class Checker {
 	}
 
 	/*
-	 * Diese Methode überprüft, ob ein String eine gültige Länge hat. Die Grenzen low und high sind inklusive!
-	 * Ist der String gültig, gibt die Methode true zurück. Sonst false.
+	 * Diese Methode überprüft, ob ein String eine gültige Länge hat. Die Grenzen
+	 * low und high sind inklusive! Ist der String gültig, gibt die Methode true
+	 * zurück. Sonst false.
 	 */
 	public static Boolean checkStringIsBetween(int low, int high, String testString) {
 		Boolean valid = false;
 		int length = testString.length();
-		if (length>= low && length <=high) {
+		if (length >= low && length <= high) {
 			valid = true;
 		}
 		return valid;
 	}
+
 	/*
-	 * Diese Methode erstellt einen zufälligen String und gibt diesen als Token zurück
+	 * Diese Methode erstellt einen zufälligen String und gibt diesen als Token
+	 * zurück
 	 */
 	public static String createToken() {
-		String token;
 		SecureRandom random = new SecureRandom();
-		byte bytes[] = new byte[20];
-		random.nextBytes(bytes);
-		token = bytes.toString();
-		return token;
-		
+		Base64.Encoder base64Encoder = Base64.getUrlEncoder();		
+		byte[] randomBytes = new byte[24];
+	    random.nextBytes(randomBytes);
+	    return base64Encoder.encodeToString(randomBytes);
 	}
 
 	/*
-	 * Diese Methode überprüft ob LocalDateTime dateTime in der Zukunft liegt und gibt true zurück, wenn das so ist.
+	 * Diese Methode überprüft ob LocalDateTime dateTime in der Zukunft liegt und
+	 * gibt true zurück, wenn das so ist.
 	 */
 	public static Boolean checkDate(LocalDate date) {
 		Boolean valid = false;
 		LocalDate now = LocalDate.now();
-		if (date.isBefore(now)||date.equals(now)) {
+		if (date.isBefore(now) || date.equals(now)) {
 			valid = true;
 		}
 		return valid;
 	}
-	
-	
+
 	/*
-	 * Diese Methode überprüft ob der userName noch nicht vergeben ist und gibt true zurück, wenn das so ist.
+	 * Diese Methode überprüft ob der userName noch nicht vergeben ist und gibt true
+	 * zurück, wenn das so ist.
 	 */
 	public static Boolean freeUsername(String userName, Accounts accounts) {
 		Boolean valid = true;
 		ArrayList<User> users = new ArrayList<User>();
-		users=accounts.getUsers();
-		int size=users.size();
-		System.out.println(size);
-		for(User u:users) {
-			if(u.getUserName().equals(userName)) {
+		users = accounts.getUsers();
+		int size = users.size();
+		for (User u : users) {
+			if (u.getUserName().equals(userName)) {
 				valid = false;
 			}
 		}
 		return valid;
 	}
-	
+
 	public static Boolean checkPriority(String priority) {
 		Boolean valid = false;
-		valid=Priority.isPriority(priority);
+		valid = Priority.isPriority(priority);
 		return valid;
 	}
-	
+
 }

@@ -18,6 +18,7 @@ public class ServerModelClientThread extends Thread {
 	private int specificID;
 	private ToDo toDo;
 	private ArrayList<ToDo> toDos = new ArrayList<>();
+	private Boolean loggedIn = false;
 
 	public ServerModelClientThread(ServerModel server, Socket socket) {
 		super("Client " + nextClientID++);
@@ -65,6 +66,7 @@ public class ServerModelClientThread extends Thread {
 					if (sizeLogin == 3) {
 						if (login(messageParts[1], messageParts[2])) {
 							reply = "Result|true|" + accounts.getUser(messageParts[1]).getToken() + "\n";
+							loggedIn = true;
 						} else {
 							reply = "Result|false\n";
 						}
@@ -88,8 +90,9 @@ public class ServerModelClientThread extends Thread {
 				case "Logout":
 					int sizeLogout = messageParts.length;
 					if (sizeLogout == 2) {
-						if (logout(messageParts[1])) {
+						if (logout(messageParts[1]) && this.loggedIn) {
 							reply = "Result|true\n";
+							loggedIn = false;
 						} else {
 							reply = "Result|false\n";
 						}
@@ -172,10 +175,10 @@ public class ServerModelClientThread extends Thread {
 					int sizeList = messageParts.length;
 					if (sizeList == 2) {
 						try {
-							if(listToDos(messageParts[1])) {
-								reply="Result|true";
-								for(ToDo t:toDos) {
-									reply.concat("|"+t.getID());
+							if (listToDos(messageParts[1])) {
+								reply = "Result|true";
+								for (ToDo t : toDos) {
+									reply.concat("|" + t.getID());
 								}
 								reply.concat("\n");
 							}
@@ -189,7 +192,18 @@ public class ServerModelClientThread extends Thread {
 					}
 					break;
 				case "Ping":
-					System.out.println("Ping");
+					int sizePing = messageParts.length;
+					if (sizePing > 1 && loggedIn) {
+						try {
+							String token = accounts.getUserFromToken(messageParts[1]).getToken();
+							reply = "Result|true";
+						} catch (Exception e) {
+							System.out.println("Da ist etwas schief gelaufen! " + e);
+							reply = "Result|false\n";
+						}
+					} else {
+						reply = "Result|true\n";
+					}
 					break;
 				default:
 					reply = "Result|false\n";
@@ -273,7 +287,6 @@ public class ServerModelClientThread extends Thread {
 		int size = accounts.getUsers().size();
 		if (size > 0) {
 			try {
-				System.out.println("Im try CreateToDo");
 				ServerModel.ID++;
 				specificID = ServerModel.ID;
 				ToDo toDo = new ToDo(specificID, title, priority, description);
