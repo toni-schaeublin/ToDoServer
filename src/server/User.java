@@ -47,25 +47,52 @@ public class User {
 		this.token = token;
 
 	}
-	
+
 	public void addToDo(ToDo toDo) {
 		this.toDos.add(toDo);
 	}
 
 	public ToDo getToDo(int id) {
 		ToDo toDo = null;
-		int size = toDos.size();
+		int i = -1;
+		int z = -1;
+		int size = this.toDos.size();
 		if (size > 0) {
-			for (ToDo t : toDos) {
+			for (ToDo t : this.toDos) {
+				i++;
 				if (t.getID() == id) {
-					toDo = t;
+					z = i;
 				}
+			}
+			if (z > -1) {
+				toDo = this.toDos.get(z);
 			}
 		}
 		return toDo;
 	}
 
 	public ArrayList<ToDo> getToDos() {
-		return toDos;
+		return this.toDos;
 	}
+
+	public Boolean deleteToDo(int id) {
+		int i = -1;
+		int z = -1;
+		Boolean deleted = false;
+		int size = this.toDos.size();
+		if (size > 0) {
+			for (ToDo t : this.toDos) {
+				i++;
+				if (t.getID() == id) {
+					z = i;
+				}
+			}
+			if (z > -1) {
+				this.toDos.remove(z);
+				deleted = true;
+			}
+		}
+		return deleted;
+	}
+
 }
