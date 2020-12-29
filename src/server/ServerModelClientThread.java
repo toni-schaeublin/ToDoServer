@@ -177,11 +177,14 @@ public class ServerModelClientThread extends Thread {
 					if (sizeList == 2) {
 						try {
 							if (listToDos(messageParts[1])) {
-								String reply = "Result|true";
+								reply = "Result|true";
 								for (ToDo t : this.toDos) {
-									reply=reply.concat("|" + t.getID());
+									String part = ("|" + t.getID());
+									reply = reply.concat(part);
 								}
-								reply=reply.concat("\n");
+								reply = reply.concat("\n");
+							} else {
+								reply = "Result|false\n";
 							}
 						} catch (Exception e) {
 							System.out.println("Da ist etwas schief gelaufen! " + e);
@@ -196,7 +199,7 @@ public class ServerModelClientThread extends Thread {
 					if (sizePing > 1 && loggedIn) {
 						try {
 							String token = accounts.getUserFromToken(messageParts[1]).getToken();
-							reply = "Result|true";
+							reply = "Result|true\n";
 						} catch (Exception e) {
 							System.out.println("Da ist etwas schief gelaufen! " + e);
 							reply = "Result|false\n";
@@ -326,7 +329,6 @@ public class ServerModelClientThread extends Thread {
 		try {
 			this.toDos = accounts.getUserFromToken(token).getToDos();
 			valid = true;
-			System.out.println("listToDos = valid");
 		} catch (Exception e) {
 			System.out.println("Da ist etwas schief gelaufen! " + e);
 		}
