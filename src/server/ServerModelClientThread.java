@@ -11,6 +11,9 @@ public class ServerModelClientThread extends Thread {
 	private static int nextClientID = 0;
 	private final String SEPARATOR = "\\|";
 	private String reply;
+	private String userName;
+	private String password;
+	private String token;
 	private ServerModel server;
 	private BufferedReader in;
 	private Accounts accounts;
@@ -54,7 +57,7 @@ public class ServerModelClientThread extends Thread {
 							&& Checker.checkEmail(messageParts[1]) && Checker.checkPassword(messageParts[2])) {
 						if (createLogin(messageParts[1], messageParts[2])) {
 							reply = "Result|true\n";
-							server.saveData();
+							server.saveAccounts();
 						} else {
 							reply = "Result|false\n";
 						}
@@ -80,6 +83,7 @@ public class ServerModelClientThread extends Thread {
 					if (sizePassword == 3 && Checker.checkPassword(messageParts[2])) {
 						if (changePassword(messageParts[1], messageParts[2])) {
 							reply = "Result|true\n";
+							server.saveAccounts();
 						} else {
 							reply = "Result|false\n";
 						}
@@ -109,6 +113,7 @@ public class ServerModelClientThread extends Thread {
 							&& Checker.checkStringIsBetween(0, 255, messageParts[4])) {
 						if (createToDo(messageParts[1], messageParts[2], messageParts[3], messageParts[4])) {
 							reply = "Result|true|" + this.specificID + "\n";
+							server.saveToDos();
 						} else {
 							reply = "Result|false\n";
 						}
@@ -161,6 +166,7 @@ public class ServerModelClientThread extends Thread {
 							int id = Integer.parseInt(messageParts[2]);
 							if (deleteToDo(messageParts[1], id)) {
 								reply = "Result|true\n";
+								server.saveToDos();
 							} else {
 								reply = "Result|false\n";
 							}
@@ -198,7 +204,7 @@ public class ServerModelClientThread extends Thread {
 					int sizePing = messageParts.length;
 					if (sizePing > 1 && loggedIn) {
 						try {
-							String token = accounts.getUserFromToken(messageParts[1]).getToken();
+							this.token = accounts.getUserFromToken(messageParts[1]).getToken();
 							reply = "Result|true\n";
 						} catch (Exception e) {
 							System.out.println("Da ist etwas schief gelaufen! " + e);
@@ -221,9 +227,11 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean createLogin(String userName, String password) {
+		this.userName=userName;
+		this.password=password;
 		Boolean valid = false;
 		try {
-			User user = new User(userName, password);
+			User user = new User(this.userName, this.password);
 			accounts.setUser(user);
 			valid = true;
 		} catch (Exception e) {
@@ -234,13 +242,15 @@ public class ServerModelClientThread extends Thread {
 
 	private Boolean login(String userName, String password) {
 		Boolean valid = false;
+		this.userName=userName;
+		this.password=password;
 		int size = accounts.getUsers().size();
 		if (size > 0) {
 			try {
-				valid = accounts.getUser(userName).getPassword().equals(password);
+				valid = accounts.getUser(this.userName).getPassword().equals(this.password);
 				if (valid) {
-					String token = Checker.createToken();
-					accounts.getUser(userName).setToken(token);
+					this.token = Checker.createToken();
+					accounts.getUser(userName).setToken(this.token);
 				}
 			} catch (Exception e) {
 				System.out.println("Da ist etwas schief gelaufen! " + e);
@@ -250,11 +260,13 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean changePassword(String token, String password) {
+		this.token=token;
+		this.password=password;
 		Boolean valid = false;
 		int size = accounts.getUsers().size();
 		if (size > 0) {
 			try {
-				accounts.getUserFromToken(token).setPassword(password);
+				accounts.getUserFromToken(this.token).setPassword(this.password);
 				valid = true;
 			} catch (Exception e) {
 				System.out.println("Da ist etwas schief gelaufen! " + e);
@@ -266,6 +278,7 @@ public class ServerModelClientThread extends Thread {
 //Beim Logout muss der Token mitgegeben werden, damit der User identifiziert werden kann!
 
 	private Boolean logout(String token) {
+		this.token=token;
 		Boolean valid = false;
 		int size = accounts.getUsers().size();
 		if (size > 0) {
@@ -275,7 +288,7 @@ public class ServerModelClientThread extends Thread {
 				 * Somit ist sichergestellt, dass man nicht mit einem leeren String oder null
 				 * auf die Daten des Users zugreifen kann!
 				 */
-				accounts.getUserFromToken(token).setToken(Checker.createToken());
+				accounts.getUserFromToken(this.token).setToken(Checker.createToken());
 				valid = true;
 			} catch (Exception e) {
 				System.out.println("Da ist etwas schief gelaufen! " + e);
@@ -287,13 +300,14 @@ public class ServerModelClientThread extends Thread {
 
 	private Boolean createToDo(String token, String title, String priority, String description) {
 		Boolean valid = false;
+		this.token=token;
 		int size = accounts.getUsers().size();
 		if (size > 0) {
 			try {
 				ServerModel.ID++;
 				specificID = ServerModel.ID;
 				ToDo toDo = new ToDo(specificID, title, priority, description);
-				accounts.getUserFromToken(token).addToDo(toDo);
+				accounts.getUserFromToken(this.token).addToDo(toDo);
 				valid = true;
 			} catch (Exception e) {
 				System.out.println("Da ist etwas schief gelaufen! " + e);
@@ -303,9 +317,10 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean deleteToDo(String token, int id) {
+		this.token=token;
 		Boolean valid = false;
 		try {
-			valid = accounts.getUserFromToken(token).deleteToDo(id);
+			valid = accounts.getUserFromToken(this.token).deleteToDo(id);
 		} catch (Exception e) {
 			System.out.println("Da ist etwas schief gelaufen! " + e);
 		}
@@ -313,9 +328,10 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean getToDo(String token, int id) {
+		this.token=token;
 		Boolean valid = false;
 		try {
-			this.toDo = accounts.getUserFromToken(token).getToDo(id);
+			this.toDo = accounts.getUserFromToken(this.token).getToDo(id);
 			valid = true;
 		} catch (Exception e) {
 			this.toDo = null;
@@ -325,9 +341,10 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean listToDos(String token) {
+		this.token=token;
 		Boolean valid = false;
 		try {
-			this.toDos = accounts.getUserFromToken(token).getToDos();
+			this.toDos = accounts.getUserFromToken(this.token).getToDos();
 			valid = true;
 		} catch (Exception e) {
 			System.out.println("Da ist etwas schief gelaufen! " + e);
