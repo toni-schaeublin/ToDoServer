@@ -7,16 +7,17 @@ public class User {
 	private String salt;
 	private String password;
 	private String token;
-	public ArrayList<ToDo> toDos = new ArrayList<>();
+	public ArrayList<ToDo> toDos;
 
 	public User(String userName, String password) {
 		this.userName = userName;
 		this.password = password;
-		this.token = "";
+		this.token = Checker.createToken();
+		this.toDos = new ArrayList<>();
 	}
 
 	public String getUserName() {
-		return userName;
+		return this.userName;
 	}
 
 	public void setUserName(String userName) {
@@ -24,7 +25,7 @@ public class User {
 	}
 
 	public String getSalt() {
-		return salt;
+		return this.salt;
 	}
 
 	public void setSalt(String salt) {
@@ -32,7 +33,7 @@ public class User {
 	}
 
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
 	public void setPassword(String password) {
@@ -40,7 +41,7 @@ public class User {
 	}
 
 	public String getToken() {
-		return token;
+		return this.token;
 	}
 
 	public void setToken(String token) {
