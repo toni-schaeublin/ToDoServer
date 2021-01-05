@@ -18,7 +18,7 @@ public class ServerModel extends Thread {
 	private Integer port;
 	private Accounts accounts = new Accounts();
 	private ServerSocket listener;
-	public static int ID = 0;
+	//public static int ID = 0;
 	private static String ACCOUNTS_FILE = ("accounts.txt");
 	private static String TODOS_FILE = ("toDos.txt");
 	private static String SEPARATOR = "\\|";
@@ -140,10 +140,6 @@ public class ServerModel extends Thread {
 				String priority = attributes[3];
 				String description = attributes[4];
 				int id=Integer.parseInt(idString);
-				//Sicherstellen, dass die globale ID grösser wird als die grösste ID im ToDo-Array
-				if(id>ServerModel.ID) {
-					ServerModel.ID=id;
-				}
 				ToDo toDo = new ToDo(id,titel,priority,description);
 				accounts.getUser(userName).addToDo(toDo);
 				line = in.readLine();

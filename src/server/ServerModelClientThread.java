@@ -227,8 +227,8 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean createLogin(String userName, String password) {
-		this.userName=userName;
-		this.password=password;
+		this.userName = userName;
+		this.password = password;
 		Boolean valid = false;
 		try {
 			User user = new User(this.userName, this.password);
@@ -242,8 +242,8 @@ public class ServerModelClientThread extends Thread {
 
 	private Boolean login(String userName, String password) {
 		Boolean valid = false;
-		this.userName=userName;
-		this.password=password;
+		this.userName = userName;
+		this.password = password;
 		int size = accounts.getUsers().size();
 		if (size > 0) {
 			try {
@@ -260,8 +260,8 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean changePassword(String token, String password) {
-		this.token=token;
-		this.password=password;
+		this.token = token;
+		this.password = password;
 		Boolean valid = false;
 		int size = accounts.getUsers().size();
 		if (size > 0) {
@@ -278,7 +278,7 @@ public class ServerModelClientThread extends Thread {
 //Beim Logout muss der Token mitgegeben werden, damit der User identifiziert werden kann!
 
 	private Boolean logout(String token) {
-		this.token=token;
+		this.token = token;
 		Boolean valid = false;
 		int size = accounts.getUsers().size();
 		if (size > 0) {
@@ -300,12 +300,25 @@ public class ServerModelClientThread extends Thread {
 
 	private Boolean createToDo(String token, String title, String priority, String description) {
 		Boolean valid = false;
-		this.token=token;
+		this.token = token;
 		int size = accounts.getUsers().size();
 		if (size > 0) {
 			try {
-				ServerModel.ID++;
-				specificID = ServerModel.ID;
+				ArrayList<ToDo> toDos = new ArrayList<>();
+				//Die ID des ToDos auf die höchste ToDo-ID dieses Users setzen!
+				toDos = accounts.getUserFromToken(token).getToDos();
+				this.specificID = 0;
+				int toDosSize = toDos.size();
+				if (toDosSize > 0) {
+					for (ToDo t : toDos) {
+						int id = t.getID();
+						if (id > this.specificID) {
+							this.specificID=id;
+						}
+
+					}
+				}
+				specificID++;
 				ToDo toDo = new ToDo(specificID, title, priority, description);
 				accounts.getUserFromToken(this.token).addToDo(toDo);
 				valid = true;
@@ -317,7 +330,7 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean deleteToDo(String token, int id) {
-		this.token=token;
+		this.token = token;
 		Boolean valid = false;
 		try {
 			valid = accounts.getUserFromToken(this.token).deleteToDo(id);
@@ -328,7 +341,7 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean getToDo(String token, int id) {
-		this.token=token;
+		this.token = token;
 		Boolean valid = false;
 		try {
 			this.toDo = accounts.getUserFromToken(this.token).getToDo(id);
@@ -341,7 +354,7 @@ public class ServerModelClientThread extends Thread {
 	}
 
 	private Boolean listToDos(String token) {
-		this.token=token;
+		this.token = token;
 		Boolean valid = false;
 		try {
 			this.toDos = accounts.getUserFromToken(this.token).getToDos();
